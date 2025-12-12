@@ -1,0 +1,11 @@
+# Core dependencies
+neo4j==5.15.0
+streamlit==1.29.0
+python-dotenv==1.0.0
+
+# Visualization
+streamlit-agraph==0.0.45
+pandas==2.1.4
+
+# Development (optional)
+pytest==7.4.3
