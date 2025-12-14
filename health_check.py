@@ -66,6 +66,8 @@ def check_dependencies():
     """Check if required packages are installed."""
     print_section("Dependencies Check")
     
+    # Note: Version numbers should match requirements.txt
+    # Update these if requirements.txt changes
     required_packages = [
         ('neo4j', '5.15.0'),
         ('streamlit', '1.29.0'),

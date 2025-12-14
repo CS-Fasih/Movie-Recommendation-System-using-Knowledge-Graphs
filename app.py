@@ -14,6 +14,7 @@ from streamlit_agraph import agraph, Node, Edge, Config
 from recommendation_engine import RecommendationEngine
 from db_connection import get_db_connection
 import logging
+import os
 
 # Configure page
 st.set_page_config(
@@ -442,7 +443,6 @@ def main():
             ### Debug Information:
             """)
             
-            import os
             neo4j_uri = os.getenv('NEO4J_URI', 'Not set')
             neo4j_user = os.getenv('NEO4J_USERNAME', 'Not set')
             has_password = 'Yes' if os.getenv('NEO4J_PASSWORD') else 'No'
