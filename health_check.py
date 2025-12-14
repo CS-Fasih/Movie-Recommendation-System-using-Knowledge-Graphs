@@ -69,7 +69,7 @@ def check_dependencies():
     required_packages = [
         ('neo4j', '5.15.0'),
         ('streamlit', '1.29.0'),
-        ('dotenv', '1.0.0'),
+        ('python-dotenv', '1.0.0'),
         ('streamlit_agraph', '0.0.45'),
         ('pandas', '2.1.4')
     ]
@@ -77,14 +77,14 @@ def check_dependencies():
     all_installed = True
     for package_name, expected_version in required_packages:
         try:
-            if package_name == 'dotenv':
-                import dotenv
-                pkg = dotenv
-            elif package_name == 'streamlit_agraph':
-                import streamlit_agraph
-                pkg = streamlit_agraph
-            else:
-                pkg = __import__(package_name)
+            # Map package names to module names
+            module_map = {
+                'python-dotenv': 'dotenv',
+                'streamlit_agraph': 'streamlit_agraph'
+            }
+            module_name = module_map.get(package_name, package_name)
+            
+            pkg = __import__(module_name)
             
             version = getattr(pkg, '__version__', 'unknown')
             print(f"✓ {package_name}: {version}")

@@ -18,7 +18,8 @@ echo "Streamlit version: $(python -m streamlit --version)"
 # Ensure streamlit config directory exists
 mkdir -p ~/.streamlit
 
-# Create streamlit config for Azure
+# Create streamlit config for Azure (overrides the repository config)
+# This is necessary because Azure requires dynamic port configuration
 cat > ~/.streamlit/config.toml << EOF
 [server]
 headless = true
