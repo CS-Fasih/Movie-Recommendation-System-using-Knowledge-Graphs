@@ -42,11 +42,20 @@ class Neo4jConnection:
     def __init__(self):
         """Initialize the connection manager."""
         if not hasattr(self, 'initialized'):
-            # Load environment variables from .env file
+            # Load environment variables from .env file (local development)
             load_dotenv()
-            self.uri = os.getenv('NEO4J_URI', 'bolt://localhost:7687')
-            self.username = os.getenv('NEO4J_USERNAME', 'neo4j')
-            self.password = os.getenv('NEO4J_PASSWORD', '')
+            
+            # Get credentials with fallbacks for Azure deployment
+            self.uri = os.getenv('NEO4J_URI') or os.environ.get('NEO4J_URI', 'bolt://localhost:7687')
+            self.username = os.getenv('NEO4J_USERNAME') or os.environ.get('NEO4J_USERNAME', 'neo4j')
+            self.password = os.getenv('NEO4J_PASSWORD') or os.environ.get('NEO4J_PASSWORD', '')
+            
+            # Debug logging for Azure
+            logger.info(f"Initializing Neo4j connection...")
+            logger.info(f"URI: {self.uri}")
+            logger.info(f"Username: {self.username}")
+            logger.info(f"Password set: {'Yes' if self.password else 'No'}")
+            
             self.initialized = True
     
     def connect(self) -> bool:

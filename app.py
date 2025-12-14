@@ -147,11 +147,39 @@ def get_recommendation_engine():
     Initialize and cache the recommendation engine.
     Caching prevents reconnecting to database on every interaction.
     """
+    import os
+    
+    # Debug: Show environment variable status (without showing actual values)
+    logger.info("=== Environment Variables Check ===")
+    logger.info(f"NEO4J_URI set: {'Yes' if os.getenv('NEO4J_URI') or os.environ.get('NEO4J_URI') else 'No'}")
+    logger.info(f"NEO4J_USERNAME set: {'Yes' if os.getenv('NEO4J_USERNAME') or os.environ.get('NEO4J_USERNAME') else 'No'}")
+    logger.info(f"NEO4J_PASSWORD set: {'Yes' if os.getenv('NEO4J_PASSWORD') or os.environ.get('NEO4J_PASSWORD') else 'No'}")
+    
     try:
-        return RecommendationEngine()
+        engine = RecommendationEngine()
+        logger.info("✓ Successfully initialized recommendation engine")
+        return engine
     except Exception as e:
-        st.error(f"Failed to connect to Neo4j database: {e}")
-        st.info("Please ensure Neo4j is running and .env file is configured correctly.")
+        logger.error(f"✗ Failed to initialize: {e}")
+        st.error(f"❌ Failed to connect to Neo4j database")
+        st.error(f"Error details: {str(e)}")
+        
+        # Show helpful debugging info
+        with st.expander("🔧 Debugging Information"):
+            st.code(f"""
+Environment Check:
+- NEO4J_URI: {'Set' if os.getenv('NEO4J_URI') or os.environ.get('NEO4J_URI') else 'NOT SET'}
+- NEO4J_USERNAME: {'Set' if os.getenv('NEO4J_USERNAME') or os.environ.get('NEO4J_USERNAME') else 'NOT SET'}
+- NEO4J_PASSWORD: {'Set' if os.getenv('NEO4J_PASSWORD') or os.environ.get('NEO4J_PASSWORD') else 'NOT SET'}
+
+Possible solutions:
+1. Verify Neo4j Aura instance is running
+2. Check Azure App Settings for environment variables
+3. Verify database credentials are correct
+4. Check if database allows connections from Azure IP
+            """)
+        
+        st.info("Please ensure Neo4j is running and environment variables are configured correctly.")
         st.stop()
 
 
