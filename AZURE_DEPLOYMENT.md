@@ -155,9 +155,13 @@ After deployment, you need to populate the Neo4j database:
 
 1. In Azure Portal, go to your Web App
 2. Navigate to **SSH** under Development Tools
-3. Run:
+3. Run health check first:
    ```bash
    cd /home/site/wwwroot
+   python health_check.py
+   ```
+4. If health check passes, seed the database:
+   ```bash
    python data_seeder.py
    ```
 
@@ -168,6 +172,7 @@ After deployment, you need to populate the Neo4j database:
 3. Navigate to `site/wwwroot`
 4. Run:
    ```bash
+   python health_check.py
    python data_seeder.py
    ```
 
@@ -178,6 +183,9 @@ After deployment, you need to populate the Neo4j database:
 NEO4J_URI=neo4j+s://xxxxx.databases.neo4j.io
 NEO4J_USERNAME=neo4j
 NEO4J_PASSWORD=your-password
+
+# Run health check
+python health_check.py
 
 # Run seeder locally
 python data_seeder.py
@@ -195,6 +203,21 @@ Your app will be available at:
 
 ## 🔧 Troubleshooting
 
+### Quick Diagnosis
+
+Run the health check script to identify issues:
+```bash
+python health_check.py
+```
+
+This will check:
+- Python version compatibility
+- Environment variables configuration
+- Required dependencies installation
+- Neo4j database connection
+- Streamlit configuration
+- Startup script status
+
 ### Issue: "Content is not showing" or Blank Page
 
 **Possible Causes:**
@@ -202,15 +225,18 @@ Your app will be available at:
 1. **Environment variables not set**
    - Solution: Verify all environment variables in Configuration → Application settings
    - Check that NEO4J_URI, NEO4J_USERNAME, and NEO4J_PASSWORD are correct
+   - Run: `python health_check.py` to verify
 
 2. **Startup command not configured**
    - Solution: Set startup command to `bash startup.sh` in Configuration → General settings
 
 3. **Database not seeded**
    - Solution: Run `python data_seeder.py` via SSH console
+   - First verify connection with `python health_check.py`
 
 4. **Neo4j connection blocked**
    - Solution: Check Neo4j Aura firewall settings, allow Azure IP ranges
+   - Test with: `python health_check.py`
 
 5. **Build failed during deployment**
    - Solution: Check deployment logs in Deployment Center

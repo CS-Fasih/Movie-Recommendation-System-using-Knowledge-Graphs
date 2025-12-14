@@ -61,9 +61,24 @@ For deploying to Azure Web Apps, see the comprehensive [Azure Deployment Guide](
 2. Create Azure Web App (Python 3.10+)
 3. Configure environment variables in Azure
 4. Deploy via GitHub Actions or Azure CLI
-5. Run data seeder via SSH console
+5. Run health check: `python health_check.py`
+6. Run data seeder via SSH console
 
 See [AZURE_DEPLOYMENT.md](AZURE_DEPLOYMENT.md) for detailed step-by-step instructions and troubleshooting.
+
+### 🔍 Health Check
+
+To verify your deployment is configured correctly:
+```bash
+python health_check.py
+```
+
+This will check:
+- Python version compatibility
+- Environment variables
+- Dependencies installation
+- Neo4j database connection
+- Streamlit configuration
 
 ### 📁 Project Structure
 ```
