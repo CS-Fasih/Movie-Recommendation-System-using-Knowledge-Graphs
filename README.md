@@ -52,6 +52,19 @@ This system uses Neo4j's graph database to model movies, actors, directors, and 
    streamlit run app.py
    ```
 
+### ☁️ Azure Deployment
+
+For deploying to Azure Web Apps, see the comprehensive [Azure Deployment Guide](AZURE_DEPLOYMENT.md).
+
+**Quick Azure Setup:**
+1. Create Neo4j Aura instance (free tier)
+2. Create Azure Web App (Python 3.10+)
+3. Configure environment variables in Azure
+4. Deploy via GitHub Actions or Azure CLI
+5. Run data seeder via SSH console
+
+See [AZURE_DEPLOYMENT.md](AZURE_DEPLOYMENT.md) for detailed step-by-step instructions and troubleshooting.
+
 ### 📁 Project Structure
 ```
 Smart_Movie_Recommendation_Engine/

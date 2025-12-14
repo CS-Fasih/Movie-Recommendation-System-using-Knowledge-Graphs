@@ -150,9 +150,8 @@ def get_recommendation_engine():
     try:
         return RecommendationEngine()
     except Exception as e:
-        st.error(f"Failed to connect to Neo4j database: {e}")
-        st.info("Please ensure Neo4j is running and .env file is configured correctly.")
-        st.stop()
+        logger.error(f"Failed to initialize recommendation engine: {e}")
+        return None
 
 
 def display_header():
@@ -413,6 +412,59 @@ def main():
     # Initialize
     display_header()
     engine = get_recommendation_engine()
+    
+    # Check if engine initialized successfully
+    if engine is None:
+        st.error("🔴 Failed to connect to Neo4j database")
+        st.warning("⚠️ The application cannot function without a database connection.")
+        
+        with st.expander("🔧 Azure Deployment Troubleshooting", expanded=True):
+            st.markdown("""
+            ### Common Azure Deployment Issues:
+            
+            1. **Environment Variables Not Set**
+               - Ensure `NEO4J_URI`, `NEO4J_USERNAME`, and `NEO4J_PASSWORD` are configured in Azure App Settings
+               - Go to: Azure Portal → Your App Service → Configuration → Application Settings
+            
+            2. **Neo4j Connection Issues**
+               - Verify Neo4j Aura instance is running
+               - Check that Azure can reach your Neo4j instance (firewall rules)
+               - Confirm Neo4j credentials are correct
+            
+            3. **Startup Script Issues**
+               - Verify startup.sh has execute permissions
+               - Check Azure logs: Azure Portal → Your App Service → Log stream
+            
+            4. **Port Configuration**
+               - Azure automatically sets the PORT environment variable
+               - Current PORT: Check Azure environment settings
+            
+            ### Debug Information:
+            """)
+            
+            import os
+            neo4j_uri = os.getenv('NEO4J_URI', 'Not set')
+            neo4j_user = os.getenv('NEO4J_USERNAME', 'Not set')
+            has_password = 'Yes' if os.getenv('NEO4J_PASSWORD') else 'No'
+            port = os.getenv('PORT', 'Not set')
+            
+            st.code(f"""
+Environment Variables Status:
+- NEO4J_URI: {neo4j_uri}
+- NEO4J_USERNAME: {neo4j_user}
+- NEO4J_PASSWORD: {'***' if has_password == 'Yes' else 'Not set'}
+- PORT: {port}
+            """)
+            
+            st.info("""
+            **Next Steps:**
+            1. Set up Neo4j Aura at https://neo4j.com/cloud/aura/
+            2. Add environment variables in Azure App Settings
+            3. Restart the application
+            4. Run data_seeder.py to populate the database
+            """)
+        
+        st.stop()
     
     # Sidebar
     display_sidebar_stats(engine)
