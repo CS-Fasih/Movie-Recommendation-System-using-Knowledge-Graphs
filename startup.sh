@@ -22,15 +22,12 @@ mkdir -p ~/.streamlit
 cat > ~/.streamlit/config.toml << EOF
 [server]
 headless = true
-port = $PORT
 address = "0.0.0.0"
 enableCORS = false
 enableXsrfProtection = false
 
 [browser]
 gatherUsageStats = false
-serverAddress = "0.0.0.0"
-serverPort = $PORT
 
 [theme]
 base = "dark"
